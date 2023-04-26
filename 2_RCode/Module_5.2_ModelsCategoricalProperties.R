@@ -7,16 +7,17 @@
 ############################################################################################
 
 # set working directory - need to set this to wd once in the room where the data will be for users to access
-setwd("C:/CDSM/5_Machine Learning Models/5b_Categorical Soil Properties/Data")
+wd<- setwd("C:/CDSM_Workshop/2_RCode")
+setwd(wd)
 
 ### STEP 1: Load Data ###
 
 # Load point data as a shapefile
 library(terra)
-Training_Points <- vect("LFV_Great_Groups_Training_Points.shp")
+Training_Points <- vect("Data/Categorical/LFV_Great_Groups_Training_Points.shp")
 
 # Load covariates as a stack. GeoTIFF file format is the best thing to use.
-Covariates <- list.files(path= "Covariates/", pattern= "\\.tif$", full.names = TRUE)      
+Covariates <- list.files(path= "Data/Categorical/Covariates/", pattern= "\\.tif$", full.names = TRUE)      
 Covariates <- rast(Covariates)
 
 # Set projection system (see https://spatialreference.org/ for codes)
@@ -76,8 +77,6 @@ RF <- train(
 stopCluster(cl)
 
 # Output confusion matrix
-dir.create("Outputs")
-
 Confusion <- (confusionMatrix(RF))
 write.csv(Confusion$table, "./Outputs/Confusion Matrix.csv")
 
@@ -106,7 +105,7 @@ plot(GGroup, col=region)
 
 
 # Generate Class Probabilities (only for Random Forest)
-dir.create("Outputs/Class Probability")
+dir.create("Data/Outputs/Class Probability")
 
 writeRaster(predict(object= Covariates, 
                     model= RF, 

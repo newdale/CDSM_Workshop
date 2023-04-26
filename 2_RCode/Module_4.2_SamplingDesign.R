@@ -14,7 +14,8 @@
 ################################################################################################################
 
 # start by setting a working directory
-setwd("C:/CDSM/4_Overview of Sampling Designs")
+wd<- setwd("C:/CDSM_Workshop/2_RCode")
+setwd(wd)
 
 # and load the libraries we will need
 library(terra)
@@ -27,13 +28,11 @@ grid20
 crs(grid20)
 names(grid20)
 
-# Now we will create a new folder for outputs
-dir.create("Data/Outputs")
+#let's add a classified crop raster
+crop2016<- rast("Data/crop2016.tif")
+grid20<- c(grid20,crop2016)
+names(grid20)
 
-# we must convert the RasterStack to a Spatial Points Data Frame
-# because some algorithms dont work with Raster Stacks
-#grid_pixel<- as(grid20,'SpatialPixelsDataFrame')
-#grid_point<- as(grid20,'SpatialPointsDataFrame')
 
 ################################################################################################################
 ################################################################################################################
@@ -53,15 +52,20 @@ points(SRS,pch=19)
 nrow(geom(SRS))
 
 # and finally export the sampling plan as required
-write.csv(SRS,"Data/Outputs/01SRS.csv")
-writeVector(SRS, filename="Data/Outputs/01SRS.shp", overwrite=TRUE)
+write.csv(SRS,"Outputs/01SRS.csv")
+writeVector(SRS, filename="Outputs/01SRS.shp", overwrite=TRUE)
 
 ########################################################################################################################
 #2. Stratified Random Sampling - Equal Sampling within Strata
 
 # we will use crop 2016 as the strata, therefore we need to specify this
-unique(grid20[[3]])
-StRS<- spatSample(x= grid20[[3]], size=6, method="stratified", as.points=TRUE, na.rm=TRUE)
+unique(grid20[['crop2016']])
+
+# assign the classes to an oject and then drop the NA because we do not need it
+crop2016<- unique(grid20[['crop2016']])
+crop2016<- crop2016[c(1:9),]
+
+StRS<- spatSample(x= grid20[['crop2016']], size=6, method="stratified", as.points=TRUE, na.rm=TRUE)
 
 # now we can visualize
 plot(grid20,"crop2016",legend=FALSE)
@@ -73,8 +77,8 @@ StRS<- extract(grid20,StRS, method="simple", xy=TRUE)
 StRS<- vect(StRS, geom=c("x","y"), crs=crs(grid20))
 
 # and finally export the sampling plan as required
-write.csv(StRS,"Data/Outputs/02StRS.csv")
-writeVector(StRS, filename = "Data/Outputs/02StRS.shp")
+write.csv(StRS,"Outputs/02StRS.csv")
+writeVector(StRS, filename = "Outputs/02StRS.shp")
 table(StRS$crop2016)
 
 ########################################################################################################################
@@ -87,19 +91,19 @@ sum(Nh)
 sum(wh)
 
 # we can look at the class weighths
-rec<- cbind(unique(grid20[[3]]),wh)
+rec<- cbind(crop2016,wh)
 rec
 
 # and now we do the sampling
-StRS2<- spatSample(x= grid20[[3]], size=50, method="weights", as.points=TRUE, na.rm=TRUE)
+StRS2<- spatSample(x= grid20[['crop2016']], size=50, method="weights", as.points=TRUE, na.rm=TRUE)
 
 # but this leaves with only the point locations, we want the covariate values as well
 StRS2<- extract(grid20,StRS2, method="simple", xy=TRUE)
 StRS2<- vect(StRS2, geom=c("x","y"), crs=crs(grid20))
 
 # and finally export the sampling plan as required
-write.csv(StRS2,"Data/Outputs/03StRS2.csv")
-writeVector(StRS2, filename = "Data/Outputs/03StRS2.shp", overwrite=TRUE)
+write.csv(StRS2,"Outputs/03StRS2.csv")
+writeVector(StRS2, filename = "Outputs/03StRS2.shp", overwrite=TRUE)
 
 # now we can visualize
 plot(grid20,"crop2016",legend=FALSE)
@@ -129,8 +133,8 @@ GRID<- extract(grid20,GRID, method="simple", xy=TRUE)
 GRID<- vect(GRID, geom=c("x","y"), crs=crs(grid20))
 
 # and finally export the sampling plan as required
-write.csv(GRID,"Data/Outputs/04GRID.csv")
-writeVector(GRID, filename = "Data/Outputs/04GRID.shp", overwrite=TRUE)
+write.csv(GRID,"Outputs/04GRID.csv")
+writeVector(GRID, filename = "Outputs/04GRID.shp", overwrite=TRUE)
 
 #######################################################################################################################
 #5. Conditioned Latin Hypercube Sampling
@@ -142,7 +146,7 @@ grid_df<- as.data.frame(grid20, xy=TRUE, na.rm=TRUE)
 # and we specify crop2016 as factor
 grid_df$crop2016<- as.factor(grid_df$crop2016)
 
-lhs<- clhs(grid_df[,c(3:8)], size=50, iter=1000, progress=TRUE, simple=FALSE)
+lhs<- clhs(grid_df[,c(3:34)], size=50, iter=1000, progress=TRUE, simple=FALSE) # index starting at column 3 to drop the x and y
 
 # we can plot the evolution of the objective function against the iterations
 plot(lhs)
@@ -157,8 +161,8 @@ plot(grid20,"DEM")
 points(lhs_plan, pch=19)
 
 # and finally export the sampling plan as required
-write.csv(lhs_plan,"Data/Outputs/05cLHS.csv")
-writeVector(lhs_plan, filename = "Data/Outputs/05cLHS.shp")
+write.csv(lhs_plan,"Outputs/05cLHS.csv")
+writeVector(lhs_plan, filename = "Outputs/05cLHS.shp")
 
 
 ########################################################################################################################

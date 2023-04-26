@@ -10,10 +10,11 @@
 # Load some libraries required for the work
 library(ithir)
 
-setwd('C:/CDSM/4_Overview of Sampling Designs/Data/')
+wd<- setwd("C:/CDSM_Workshop/2_RCode")
+setwd(wd)
 
 # Load some data
-MyData<- read.csv('MyData.csv')
+MyData<- read.csv('Data/MyData.csv')
 View(MyData)
 
 # let's visualize the data for the profile

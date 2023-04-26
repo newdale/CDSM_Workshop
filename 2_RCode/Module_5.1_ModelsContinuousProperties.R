@@ -17,7 +17,8 @@ library(terra)
 library(onsoilsurvey)
 
 # set working directory - need to set this to wd once in the room where the data will be for users to access
-setwd("C:/CDSM/5_Machine Learning Models/5a_Continuous Soil Properties")
+wd<- setwd("C:/CDSM_Workshop/2_RCode")
+setwd(wd)
 
 # let's call in the analytical data table
 MyData<- read.csv('Data/Analytical.csv')
@@ -63,6 +64,13 @@ grid20<-rast(grid.name.list)
 grid20
 crs(grid20)
 names(grid20)
+nlyr(grid20)
+
+# let us call back the list of VIF-selected covariates from Module 3.2 to subset the covariates
+vif_layers<- read.csv("Outputs/vif_layers.csv")
+grid20<- subset(grid20, vif_layers[,1])
+names(grid20)
+nlyr(grid20)
 
 # now we can plot a raster layer from the stack and the sample points to make sure they are aligned as we expect
 plot(grid20,3)
@@ -184,9 +192,6 @@ plot(varImp(RF005))
 # now we can apply our models and create the predicted maps
 # this can be done directly to raster
 
-# we will start by creating a folder for the outputs
-dir.create('Data/Outputs')
-
 # Applying the models directly to raster
 # This writes the raster directly to the hard drive 
 # It also assigns them to objects in the environment variables for easy plotting
@@ -195,7 +200,7 @@ OC005_cu<- predict(object= grid20,
                    model= CU005,
                    na.rm=TRUE,
                    cores=1,
-                   filename="Data/Outputs/OC005_cu.tif",
+                   filename="Outputs/OC005_cu.tif",
                    filetype="GTiff",
                    overwrite=TRUE)
 
@@ -203,7 +208,7 @@ OC005_rf<- predict(object= grid20,
                    model= RF005,
                    na.rm=TRUE,
                    cores=1,
-                   filename="Data/Outputs/OC005_rf.tif",
+                   filename="Outputs/OC005_rf.tif",
                    filetype="GTiff",
                    overwrite=TRUE)
 

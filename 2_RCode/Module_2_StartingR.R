@@ -63,7 +63,7 @@ library(sp)
 # For example, if you are working with a 1GB datatable, it will require roughly 1GB of RAM to manage that data
 # Of course, there are some exceptions to this (e.g. Raster Package), where the package will run things off hard drive
 
-setwd("C:/CDSM/2_Introduction to R for DSM")
+setwd("C:/CDSM_Workshop/2_RCode")
 
 # Sometimes you will access some data in a SUB-DIRECTORY of the WORKING DRIVE
 # "Data/" means that we will be accessing a .csv file from the Data subdirectory
@@ -77,7 +77,7 @@ View(MyData)
 
 # Sometimes you may want to create a new directory for your outputs.
 
-dir.create("Data/Outputs")
+dir.create("Outputs")
 
 ######################################
 ### DEMO 3: BASIC DATA EXPLORATION ###
@@ -104,7 +104,7 @@ boxplot(OC~HORIZONID, data=MyData) # The formula shows OC as a function (~) of H
 
 # We can then write the modified data into a new csv file
 
-write.csv(MyData, "./Data/Outputs/NewData.csv")
+write.csv(MyData, "./Outputs/NewData.csv")
 
 # Often times, we need to clean up our workspace. To remove an R object, use the rm() function.
 # Remember, each R object is committed to memory...
