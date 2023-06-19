@@ -26,7 +26,6 @@ install.packages("RColorBrewer")
 install.packages("RSAGA")
 install.packages("sf")
 install.packages("snowfall")
-install.packages("sp")
 install.packages("tmap")
 install.packages("devtools")
 install.packages("usethis")
@@ -40,18 +39,17 @@ whitebox::install_whitebox()
 
 #ithir requires manual installation and some dependencies
 install.packages("aqp")
-install.packages("maptools")
 install.packages("matrixStats")
 #install.packages("C:/CDSM/R Packages & Documentations/Packages/ithir_1.0.tar.gz", repos = NULL, type = "source")
 devtools::install_bitbucket("brendo1001/ithir/pkg")
 devtools::install_github("newdale/onsoilsurvey")
 
 library(terra)
-library(sp)
+library(sf)
 
 # If you are ever unsure about what the functions or packages in R are doing, you can use ?function to get the documentation
 
-?sp              # shows what the sp package does
+?sf              # shows what the sp package does
 ?terra          # shows what the rast() function does
 
 ##############################################################

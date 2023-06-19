@@ -86,6 +86,7 @@ write.csv(Confusion$table, "./Outputs/Confusion Matrix.csv")
 legend<- data.frame(levels(Training_Points$G_Group))
 colnames(legend)[1] <- "Class"
 legend$Code <- seq.int(nrow(legend))
+legend<- legend[,c(2,1)]
 write.csv(legend, "./Outputs/Map Legend.csv")
 
 # Generate Hardened Map
@@ -99,13 +100,13 @@ GGroup<- writeRaster(predict(object= Covariates,
 # We can visualize the map by converting it to a factor map and creating a color palette
 library(RColorBrewer)
 GGroup<- as.factor(GGroup)
-levels(GGroup)<- legend$Class
+levels(GGroup)<- legend
 region<- colorRampPalette(brewer.pal(12, "Accent"))(15)
 plot(GGroup, col=region)
 
 
 # Generate Class Probabilities (only for Random Forest)
-dir.create("Data/Outputs/Class Probability")
+dir.create("Outputs/Class Probability")
 
 writeRaster(predict(object= Covariates, 
                     model= RF, 

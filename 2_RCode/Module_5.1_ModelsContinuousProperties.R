@@ -276,12 +276,12 @@ RF005Opt <- train(data=Model_data,
                   trControl = fitControl)
 
 # how did we do compared to using all covariates?
-oss.getCCC(RF005)
-oss.getCCC(RF005Opt)
+oss.getCCC(RF005)$ccc_optimal_model
+oss.getCCC(RF005Opt)$ccc_optimal_model
 
 # this improved the model quite a bit
 # RMSE from      8.6  -> 7.9
-# Rsquared       0.48 -> 0.56
+# Rsquared       0.47 -> 0.56
 # CCC            0.54 -> 0.63
 
 

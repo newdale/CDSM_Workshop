@@ -19,6 +19,7 @@ setwd(wd)
 
 # and load the libraries we will need
 library(terra)
+library(onsoilsurvey)
 
 # We will start by bringing in some environmental covariates
 # Create a rasterstack that will be used for creating sampling designs
@@ -187,7 +188,7 @@ s1 <- rbind(data.frame(method = "SRS", DEM=SRS$DEM),
            
 # using ggplot we can now plot the original covariate DEM values as histogram bars and the sampling distributions as curves
 library(ggplot2)
-ggplot() + geom_histogram(data=s0, aes(x=DEM,fill="red",y=..density..),binwidth=.5, alpha=.5, position="identity") + geom_density(data = s1, aes(x = DEM, col = method))
+ggplot() + geom_histogram(data=s0, aes(x=DEM,fill="red",y=after_stat(density)),binwidth=.5, alpha=.5, position="identity") + geom_density(data = s1, aes(x = DEM, col = method))
 
 
 
@@ -201,7 +202,7 @@ s2 <- rbind(data.frame(method = "SRS", TWI= SRS$TWI),
             data.frame(method = "cLHS", TWI= lhs_plan$TWI)
             
 )
-ggplot() + geom_histogram(data=s00, aes(x=TWI,fill="red",y=..density..),binwidth=.5, alpha=.5, position="identity") + geom_density(data = s2, aes(x = TWI, col = method))
+ggplot() + geom_histogram(data=s00, aes(x=TWI,fill="red",y=after_stat(density)),binwidth=.5, alpha=.5, position="identity") + geom_density(data = s2, aes(x = TWI, col = method))
 
 
 
@@ -209,7 +210,7 @@ ggplot() + geom_histogram(data=s00, aes(x=TWI,fill="red",y=..density..),binwidth
 s3 <- rbind(s0,s1)
 
 
-ggplot(s3,aes(x=DEM)) + stat_ecdf(aes(colour=method), size=1) +
+ggplot(s3,aes(x=DEM)) + stat_ecdf(aes(colour=method), linewidth=1) +
   scale_color_manual(breaks=c("cLHS","Grid","Original","SRS","StRS","StRS2"),
                      values=c("blue", "red", "black", "orange", "dark green", "brown"))
 

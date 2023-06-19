@@ -83,7 +83,7 @@ rsaga.geoprocessor('ta_hydrology', 20, env = work_env, param = list(SLOPE = 'Out
 
 ######## Convert sgrds to tiff #############
 
-# CREATE A RASTER STACK OF THE COVARIATES WE JUST CREATED
+# CREATE A RASTER STACK (SpatRaster) OF THE COVARIATES WE JUST CREATED
 files <- list.files(path="Outputs/SGRDS", pattern="*.sdat$", full.names=T, recursive=FALSE)
 sgrd_stack <- rast(files)
 sgrd_stack
