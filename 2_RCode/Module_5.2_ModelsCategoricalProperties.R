@@ -102,7 +102,7 @@ library(RColorBrewer)
 GGroup<- as.factor(GGroup)
 levels(GGroup)<- legend
 region<- colorRampPalette(brewer.pal(12, "Accent"))(15)
-plot(GGroup, col=region)
+terra::plot(GGroup, col=region, mar=c(3, 3, 1, 8))
 
 
 # Generate Class Probabilities (only for Random Forest)

@@ -69,9 +69,10 @@ rsaga.geoprocessor('ta_morphometry', 18, env = work_env, param = list(DEM = 'Out
                                                                       TPI = 'Outputs/SGRDS/TPI'))
 
 # Create catchment areas
-rsaga.geoprocessor('garden_learn_to_program', 7, env = work_env, param = list(ELEVATION = 'Outputs/SGRDS/DEM.sgrd',
-                                                                            AREA = 'Outputs/SGRDS/CATCHMENT',
+rsaga.geoprocessor('ta_hydrology', 1, env = work_env, param = list(ELEVATION = 'Outputs/SGRDS/DEM.sgrd',
+                                                                            FLOW = 'Outputs/SGRDS/CATCHMENT',
                                                                             METHOD = 1))
+
 
 # Run Topographic Wetness Index
 rsaga.geoprocessor('ta_hydrology', 20, env = work_env, param = list(SLOPE = 'Outputs/SGRDS/sloperad.sgrd', 
